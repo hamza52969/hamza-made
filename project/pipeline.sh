@@ -1,2 +1,6 @@
 #!/bin/bash
-python /hamza-made/project/madepipeline.py
+
+# Correct the path to madepipeline.py
+python ./project/madepipeline.py
+
+echo "Data pipeline execution completed."
