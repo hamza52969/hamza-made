@@ -1,0 +1,69 @@
+pipeline GTFS{
+
+    httpExtractor -> selectFile->  TextTransformer  ->txtInterpreter -> removeColumns -> tableHeaders -> sqlDatabase;
+
+    block httpExtractor oftype GTFSExtractor{
+        url:"https://gtfs.rhoenenergie-bus.de/GTFS.zip";
+    } //o:file
+
+
+
+    block selectFile oftype FilePicker{
+        path:"/stops.txt";
+    } //i: filesystem o: file
+
+    
+    block TextTransformer oftype TextFileInterpreter{
+    encoding: "utf8";
+} //i: table o:tbl
+
+    block txtInterpreter oftype CSVInterpreter{
+        delimiter:",";
+        enclosing:'"';
+} //i: textfile o: sheet
+
+block removeColumns oftype ColumnDeleter {
+   delete: [column B, column D,column H, column I,column J, column K,column L];
+ }
+
+
+
+    block tableHeaders oftype TableInterpreter{
+        header: false;
+        columns:[
+           "stop_id" oftype integer,
+           "stop_name" oftype text,
+           "stop_lat" oftype GeoPointValue,
+           "stop_lon" oftype GeoPointValue,
+           "zone_id" oftype zoneValue
+        ];
+    } //i: sheet o:table
+
+    block sqlDatabase oftype SQLiteLoader{
+        table:"stops";
+        file:"./gtfs.sqlite";
+    } //i:tbl
+
+    constraint GeoPoints oftype RangeConstraint {
+    // regex: /\d{1,3}\.\d+,\s*\d{1,3}\.\d+/;
+        lowerBound: -90;
+        upperBound: 90;
+    }
+    valuetype GeoPointValue oftype decimal {
+        // 10. Valuetypes can be further refined by providing constraints.
+        constraints: [
+            GeoPoints
+        ];
+    }
+
+    valuetype zoneValue oftype integer{
+        constraints:[
+            zoneSelector
+        ];
+    }
+
+    constraint zoneSelector on integer: 
+        value == 1645;
+    
+    
+}
