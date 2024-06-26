@@ -19,9 +19,7 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: 3.11
-    - name: Install dependencies
-      run: |
-        pip install -r requirement.txt
+    
     - name: Test with test-files
       run: |
         ../project/tests.sh
