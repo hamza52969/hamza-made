@@ -1,0 +1,78 @@
+pipeline GoodsTransport {
+    
+    DataExtractor -> latinText -> delimiterCSV -> deleteRows ->deleteColumns -> tableHeaders -> sqlDatabase;
+
+    
+
+    block DataExtractor oftype HttpExtractor{
+        url:"https://www-genesis.destatis.de/genesis/downloads/00/tables/46131-0014_00.csv";
+    }
+
+    block latinText oftype TextFileInterpreter{
+        encoding:"latin2";
+    }
+
+    block delimiterCSV oftype CSVInterpreter{
+        delimiter:";";
+    }
+
+    block deleteRows oftype RowDeleter{
+        delete: [row 1, row 2,row 3,row 4,row 5, row 6,row 7,row 8];
+    }
+
+    block deleteColumns oftype ColumnDeleter{
+        delete: [column F,column G,column H,column I,column J,column K,column L,column M,column N,column O,
+        column P,column Q,column R,column S,column T,column U,column V,column W,column X,column Y,column Z,
+        column AA,column AB,column AC,column AD,column AE,column AF,column AG,column AH,column AI,column AJ,
+        column AK,column AL,column AM,column AN,column AO,column AP,column AQ,column AR,column AS];
+    } 
+ 
+
+
+    block tableHeaders oftype TableInterpreter{
+        header: false;
+        columns:[
+            "year" oftype positiveInteger,
+            "month" oftype validMonth,
+            "goods_id" oftype GoodsID,
+            "goods_name" oftype text,
+            "goods_source" oftype text,
+            "abroad" oftype positiveInteger,
+            "total" oftype positiveInteger,
+        ];
+    }
+
+    block sqlDatabase oftype SQLiteLoader{
+        table:"goods";
+        file:"./goodsTransportedByTrain.sqlite";
+    }
+
+    valuetype validMonth oftype text{
+        constraints:[
+            c_validMonth
+        ];
+    }
+
+
+    valuetype positiveInteger oftype integer{
+        constraints: [
+            c_postivenum
+        ];
+    }
+
+    valuetype GoodsID oftype text {
+        constraints:[
+            c_goodsID
+        ];
+    }
+
+
+    constraint c_validMonth on text:
+    value in ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+
+    constraint c_postivenum on integer:
+    value >= 0;
+
+    constraint c_goodsID on text:
+    value matches /NST7-[0-9A-Z]{3}/;
+}

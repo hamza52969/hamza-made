@@ -73,21 +73,21 @@ def save_to_sqlite(df, climate_change, climate):
 
 def main():
      drop_columns_first_url= ['D-N', 'DJF', 'MAM', 'JJA', 'SON']
-     keep_columns_second_url= ['country', 'year', 'population', 'cement_co2', 'co2', 'co2_growth_prct', 'coal_co2', 'gas_co2','oil_co2', 'share_global_co2']
+     keep_columns_second_url= ['country', 'year', 'cement_co2', 'co2', 'co2_growth_prct', 'coal_co2', 'gas_co2','oil_co2', 'share_global_co2']
      for i, url in enumerate(data_urls):
         if i == 0:
             # Skip the first row and use the second row as the header for the first URL
             df = download_data(url, header=1)
             df = first_url_delete_rows_before_year(df, 1950)
             df= drop_columns(df, drop_columns_first_url)
-            print('first url: ',df.head())
+            print(df.head())
             
         else:
            df = download_data(url)
            if not df.empty and 'year' in df.columns:
                 df = delete_rows_before_year(df, 1950)
                 df= keep_columns(df, keep_columns_second_url)
-                print('second url: ', df.head())
+                print(df.head())
         if not df.empty:
             save_to_sqlite(df, f"dataset{i+1}.db", "climate")
             
