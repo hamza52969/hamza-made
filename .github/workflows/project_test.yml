@@ -24,4 +24,4 @@ jobs:
         pip install -r requirement.txt
     - name: Test with test-files
       run: |
-        ./project/tests.sh
+        ../project/tests.sh
