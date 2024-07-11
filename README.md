@@ -1,3 +1,13 @@
+# Topic
+Effects of CO2 emmissions on global temprature anomalies
+
+# Short description
+The report investigates the impact of rising CO2 emissions on global temperature anomalies from 1950 to 2024, aiming to understand the correlation between human activities and climate change. 
+Using data from NASA GISS Surface Temperature Analysis and Our World in Data CO2 dataset, the study analyzes temperature and CO2 emission trends, focusing on various sources like cement, coal, 
+gas, and oil. The analysis reveals a strong relationship between increasing CO2 levels and temperature anomalies, indicating that industrial activities significantly contribute to global warming.
+Despite these findings, the report notes that CO2 is not the sole factor influencing temperature changes, suggesting the need for further analysis with additional variables. The data was processed
+through a custom pipeline, ensuring accuracy and consistency in the results.
+
 # Exercise Badges
 
 ![](https://byob.yarr.is/hamza52969/hamza-made/score_ex1) ![](https://byob.yarr.is/hamza52969/hamza-made/score_ex2) ![](https://byob.yarr.is/hamza52969/hamza-made/score_ex3) ![](https://byob.yarr.is/hamza52969/hamza-made/score_ex4) ![](https://byob.yarr.is/hamza52969/hamza-made/score_ex5)
